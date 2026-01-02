@@ -14,12 +14,18 @@ func _ready() -> void:
 		if child is Unit:
 			var cell = map.local_to_map(child.position)
 			units[cell] = child
+			child.grid_position = cell
 
 	astargrid.region = map.get_used_rect()
 	astargrid.cell_size = map.tile_set.tile_size
 	astargrid.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astargrid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+
 	astargrid.update()
+	
+	for cell in map.get_used_cells():
+		var is_solid = map.get_cell_tile_data(cell).terrain_set == 0
+		astargrid.set_point_solid(cell, is_solid)
 
 func move_unit(unit: Unit, target_cell: Vector2i) -> bool:
 	if not map.is_valid(target_cell):
@@ -27,6 +33,7 @@ func move_unit(unit: Unit, target_cell: Vector2i) -> bool:
 
 	var original_grid_position = unit.grid_position
 	var path := astargrid.get_id_path(unit.grid_position, target_cell)
+
 	await unit.move(path, map)
 
 	units.erase(original_grid_position)

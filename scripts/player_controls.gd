@@ -39,8 +39,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			if cell in reachable_cells:
 				unit_manager.move_unit(selected_unit, cell)
 			cancel_selection()
-		
-		print("Selected unit: ", selected_unit)
 
 	if event.is_action_pressed("cancel"):
 		cancel_selection()

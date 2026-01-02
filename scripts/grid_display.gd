@@ -32,8 +32,6 @@ func _ready() -> void:
 		panels.append(panel)
 
 func highlight_selection(paths: Array[Vector2i]) -> void:
-	print(paths)
-	print(paths.size())
 	for cell in paths:
 		var index = cell.y * columns + cell.x
 		if index >= 0 and index < panels.size():

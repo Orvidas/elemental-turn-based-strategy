@@ -33,11 +33,12 @@ script = ExtResource("3_fmty4")
 map = NodePath("../Map")
 
 [node name="Unit" type="Sprite2D" parent="UnitManager"]
-position = Vector2(232, 184)
+position = Vector2(120, 120)
 texture = ExtResource("4_2vmhc")
 region_enabled = true
 region_rect = Rect2(9, 9, 14, 14)
 script = ExtResource("5_i46ye")
+move_speed = 150.0
 
 [node name="PlayerControls" parent="." node_paths=PackedStringArray("map", "unit_manager") instance=ExtResource("2_etyyu")]
 map = NodePath("../Map")
