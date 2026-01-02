@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctk6pqsahsw18"]
+
+[ext_resource type="PackedScene" uid="uid://t7oi5os2rtkw" path="res://scenes/demo_map.tscn" id="1_hvmh0"]
+[ext_resource type="PackedScene" uid="uid://bwmsgscawihao" path="res://scenes/cursor.tscn" id="2_etyyu"]
+[ext_resource type="Script" uid="uid://b8kdy5vufcx8g" path="res://scripts/map.gd" id="2_fxo6y"]
+
+[node name="DemoLevel" type="Node2D"]
+
+[node name="Map" parent="." instance=ExtResource("1_hvmh0")]
+script = ExtResource("2_fxo6y")
+
+[node name="PlayerControls" parent="." node_paths=PackedStringArray("map") instance=ExtResource("2_etyyu")]
+map = NodePath("../Map")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(120, 120)
+zoom = Vector2(2.5, 2.5)

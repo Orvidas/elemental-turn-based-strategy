@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwmsgscawihao"]
+
+[ext_resource type="Script" uid="uid://c3jqul422sn3c" path="res://scripts/player_controls.gd" id="1_ndevg"]
+[ext_resource type="Texture2D" uid="uid://d15e85ytd5c1v" path="res://sprites/cursor.png" id="1_s0nli"]
+[ext_resource type="Script" uid="uid://d6ndv1takhap" path="res://scripts/cursor_anim.gd" id="2_ndevg"]
+
+[node name="PlayerControls" type="Node2D"]
+script = ExtResource("1_ndevg")
+
+[node name="Cursor" type="Sprite2D" parent="."]
+texture = ExtResource("1_s0nli")
+script = ExtResource("2_ndevg")
