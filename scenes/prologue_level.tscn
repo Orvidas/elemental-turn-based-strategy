@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4l3wpykuwmo"]
+
+[ext_resource type="PackedScene" uid="uid://43bduavpeyt0" path="res://scenes/prologue_map.tscn" id="1_5y4sk"]
+[ext_resource type="Script" uid="uid://dbv85idaeb2tn" path="res://scripts/grid_display.gd" id="2_0xn2n"]
+[ext_resource type="StyleBox" uid="uid://bbf7y8vy5mu3e" path="res://sprites/grid_stylebox.tres" id="3_mp8fi"]
+[ext_resource type="Script" uid="uid://waleqcloh7xg" path="res://scripts/unit_manager.gd" id="4_03wyr"]
+[ext_resource type="Texture2D" uid="uid://bdc127y0abwas" path="res://sprites/Puny-Characters/Human-Worker-Red.png" id="5_6bg45"]
+[ext_resource type="Script" uid="uid://d1kr8f78dkdsn" path="res://scripts/unit.gd" id="6_8ep2f"]
+[ext_resource type="PackedScene" uid="uid://bwmsgscawihao" path="res://scenes/cursor.tscn" id="7_cyj41"]
+
+[node name="PrologueLevel" type="Node2D"]
+
+[node name="Map" parent="." instance=ExtResource("1_5y4sk")]
+
+[node name="GridDisplay" type="GridContainer" parent="." node_paths=PackedStringArray("map")]
+process_mode = 4
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 2
+script = ExtResource("2_0xn2n")
+map = NodePath("../Map")
+panel_stylebox = ExtResource("3_mp8fi")
+movement_color = Color(0.37254903, 0.8039216, 0.89411765, 0.5882353)
+movement_border_color = Color(0.3882353, 0.60784316, 1, 0.78431374)
+
+[node name="UnitManager" type="Node2D" parent="." node_paths=PackedStringArray("map")]
+script = ExtResource("4_03wyr")
+map = NodePath("../Map")
+
+[node name="Unit" type="Sprite2D" parent="UnitManager"]
+position = Vector2(104, 248)
+texture = ExtResource("5_6bg45")
+region_enabled = true
+region_rect = Rect2(9, 9, 14, 14)
+script = ExtResource("6_8ep2f")
+move_speed = 150.0
+
+[node name="PlayerControls" parent="." node_paths=PackedStringArray("map", "unit_manager") instance=ExtResource("7_cyj41")]
+map = NodePath("../Map")
+unit_manager = NodePath("../UnitManager")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(240, 145)
+zoom = Vector2(2, 2)
+
+[connection signal="selection_canceled" from="PlayerControls" to="GridDisplay" method="clear_highlights"]
+[connection signal="toggle_grid" from="PlayerControls" to="GridDisplay" method="toggle_neutral_grid"]
+[connection signal="unit_selected" from="PlayerControls" to="GridDisplay" method="highlight_selection"]

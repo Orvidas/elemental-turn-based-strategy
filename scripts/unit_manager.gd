@@ -24,7 +24,7 @@ func _ready() -> void:
 	astargrid.update()
 	
 	for cell in map.get_used_cells():
-		var is_solid = map.get_cell_tile_data(cell).terrain_set == 0
+		var is_solid = map.get_top_level_tile_data(cell).terrain_set == 0
 		astargrid.set_point_solid(cell, is_solid)
 
 func move_unit(unit: Unit, target_cell: Vector2i) -> bool:
@@ -44,7 +44,7 @@ func get_unit(cell: Vector2i) -> Unit:
 	return units.get(cell, null)
 
 func get_potential_paths(unit: Unit) -> Array[Vector2i]:
-	if units.has(unit.grid_position) == false:
+	if not units.has(unit.grid_position):
 		return []
 
 	var reachable_cells: Array[Vector2i] = []
@@ -57,10 +57,10 @@ func get_potential_paths(unit: Unit) -> Array[Vector2i]:
 		move_path.erase(current_cell)
 
 		var neighbors = [
-			current_cell + Vector2i(1, 0),
-			current_cell + Vector2i(-1, 0),
-			current_cell + Vector2i(0, 1),
-			current_cell + Vector2i(0, -1)
+			current_cell + Vector2i.RIGHT,
+			current_cell + Vector2i.LEFT,
+			current_cell + Vector2i.DOWN,
+			current_cell + Vector2i.UP
 		]
 
 		for neighbor in neighbors:
