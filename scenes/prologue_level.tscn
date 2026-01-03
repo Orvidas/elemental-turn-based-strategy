@@ -1,11 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4l3wpykuwmo"]
+[gd_scene load_steps=10 format=3 uid="uid://c4l3wpykuwmo"]
 
 [ext_resource type="PackedScene" uid="uid://43bduavpeyt0" path="res://scenes/prologue_map.tscn" id="1_5y4sk"]
 [ext_resource type="Script" uid="uid://dbv85idaeb2tn" path="res://scripts/grid_display.gd" id="2_0xn2n"]
 [ext_resource type="StyleBox" uid="uid://bbf7y8vy5mu3e" path="res://sprites/grid_stylebox.tres" id="3_mp8fi"]
 [ext_resource type="Script" uid="uid://waleqcloh7xg" path="res://scripts/unit_manager.gd" id="4_03wyr"]
+[ext_resource type="Script" uid="uid://cs5n6m04orxav" path="res://scripts/faction.gd" id="5_0xn2n"]
 [ext_resource type="PackedScene" uid="uid://ccdoby6h156o4" path="res://scenes/standard_unit.tscn" id="5_6pewv"]
+[ext_resource type="Script" uid="uid://bk1od7eigwrjs" path="res://scripts/turn_manager.gd" id="7_03wyr"]
 [ext_resource type="PackedScene" uid="uid://bwmsgscawihao" path="res://scenes/cursor.tscn" id="7_cyj41"]
+[ext_resource type="Script" uid="uid://c75hxe3ejyijd" path="res://scripts/enemy_ai.gd" id="9_6bg45"]
 
 [node name="PrologueLevel" type="Node2D"]
 
@@ -29,17 +32,37 @@ movement_border_color = Color(0.3882353, 0.60784316, 1, 0.78431374)
 script = ExtResource("4_03wyr")
 map = NodePath("../Map")
 
-[node name="AnimatedSprite2D" parent="UnitManager" instance=ExtResource("5_6pewv")]
+[node name="PlayerFaction" type="Node2D" parent="UnitManager"]
+script = ExtResource("5_0xn2n")
+is_player_faction = true
+
+[node name="Unit" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
 position = Vector2(104, 248)
 
-[node name="PlayerControls" parent="." node_paths=PackedStringArray("map", "unit_manager") instance=ExtResource("7_cyj41")]
-map = NodePath("../Map")
-unit_manager = NodePath("../UnitManager")
+[node name="EnemyFaction" type="Node2D" parent="UnitManager"]
+script = ExtResource("5_0xn2n")
+
+[node name="Unit" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(392, 216)
+
+[node name="TurnManager" type="Node2D" parent="."]
+script = ExtResource("7_03wyr")
+
+[node name="PlayerControls" parent="TurnManager" node_paths=PackedStringArray("map", "unit_manager", "player_faction") instance=ExtResource("7_cyj41")]
+map = NodePath("../../Map")
+unit_manager = NodePath("../../UnitManager")
+player_faction = NodePath("../../UnitManager/PlayerFaction")
+
+[node name="EnemyAI" type="Node2D" parent="TurnManager" node_paths=PackedStringArray("unit_manager", "enemy_faction")]
+script = ExtResource("9_6bg45")
+unit_manager = NodePath("../../UnitManager")
+enemy_faction = NodePath("../../UnitManager/EnemyFaction")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(240, 145)
 zoom = Vector2(2, 2)
 
-[connection signal="selection_canceled" from="PlayerControls" to="GridDisplay" method="clear_highlights"]
-[connection signal="toggle_grid" from="PlayerControls" to="GridDisplay" method="toggle_neutral_grid"]
-[connection signal="unit_selected" from="PlayerControls" to="GridDisplay" method="highlight_selection"]
+[connection signal="selection_canceled" from="TurnManager/PlayerControls" to="GridDisplay" method="clear_highlights"]
+[connection signal="toggle_grid" from="TurnManager/PlayerControls" to="GridDisplay" method="toggle_neutral_grid"]
+[connection signal="unit_selected" from="TurnManager/PlayerControls" to="GridDisplay" method="highlight_selection"]

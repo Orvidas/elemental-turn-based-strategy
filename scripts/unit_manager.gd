@@ -11,10 +11,10 @@ var astargrid: AStarGrid2D = AStarGrid2D.new()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for child in get_children():
-		if child is Unit:
-			var cell = map.local_to_map(child.position)
-			units[cell] = child
-			child.grid_position = cell
+		if child is Faction:
+			for unit in child.units:
+				unit.grid_position = map.local_to_map(unit.position)
+				units[unit.grid_position] = unit
 
 	astargrid.region = map.get_used_rect()
 	astargrid.cell_size = map.tile_set.tile_size
