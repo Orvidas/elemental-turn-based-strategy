@@ -1,10 +1,13 @@
-extends Sprite2D
+extends AnimatedSprite2D
 class_name Unit
 
 var grid_position: Vector2i = Vector2i.ZERO
 
 @export
-var move_speed := 200.0
+var move_speed := 150.0
+
+func _ready() -> void:
+	play("Idle")
 
 func move(path: Array[Vector2i], map: Map) -> void:
 	if path.is_empty():
@@ -14,6 +17,15 @@ func move(path: Array[Vector2i], map: Map) -> void:
 		var target_pos = map.map_to_local(cell)
 		if position == target_pos:
 			continue
+
+		if target_pos.x > position.x:
+			play("Walking Right")
+		elif target_pos.x < position.x:
+			play("Walking Left")
+		elif target_pos.y > position.y:
+			play("Walking Down")
+		elif target_pos.y < position.y:
+			play("Walking Up")
 
 		var dist = position.distance_to(target_pos)
 		var duration = 0.0
@@ -27,6 +39,7 @@ func move(path: Array[Vector2i], map: Map) -> void:
 		await tween.finished
 
 	grid_position = path[-1]
+	play("Idle")
 
 func get_move_amount() -> int:
 	return 5
