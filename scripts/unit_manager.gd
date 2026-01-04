@@ -6,12 +6,15 @@ var map: Map
 
 var units: Dictionary = {}
 
+var factions: Array[Faction] = []
+
 var astargrid: AStarGrid2D = AStarGrid2D.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for child in get_children():
 		if child is Faction:
+			factions.append(child)
 			for unit in child.units:
 				unit.grid_position = map.local_to_map(unit.position)
 				units[unit.grid_position] = unit
@@ -28,7 +31,7 @@ func _ready() -> void:
 		astargrid.set_point_solid(cell, is_solid)
 
 func move_unit(unit: Unit, target_cell: Vector2i) -> bool:
-	if not map.is_valid(target_cell):
+	if not map.is_valid(target_cell) and not units.has(target_cell):
 		return false
 
 	var original_grid_position = unit.grid_position
@@ -47,6 +50,24 @@ func get_potential_paths(unit: Unit) -> Array[Vector2i]:
 	if not units.has(unit.grid_position):
 		return []
 
+	# Clear all units from the astargrid
+	for clear_unit in units.values():
+		astargrid.set_point_solid(clear_unit.grid_position, false)
+
+	# Mark enemy units as solid
+	var enemy_factions: Array[Faction] = factions.duplicate()
+	for faction in factions:
+		if faction.units.has(unit):
+			enemy_factions.erase(faction)
+
+			for allied in faction.allied_factions:
+				enemy_factions.erase(allied)
+			break
+
+	for enemy_faction in enemy_factions:
+		for enemy_unit in enemy_faction.units:
+			astargrid.set_point_solid(enemy_unit.grid_position, true)
+
 	var reachable_cells: Array[Vector2i] = []
 	var move_path := {}
 	move_path[unit.grid_position] = unit.get_move_amount()
@@ -64,9 +85,8 @@ func get_potential_paths(unit: Unit) -> Array[Vector2i]:
 		]
 
 		for neighbor in neighbors:
-			if map.is_valid(neighbor) and not astargrid.is_point_solid(neighbor) and remaining_move > 0:
+			if map.is_valid(neighbor) and not astargrid.is_point_solid(neighbor) and remaining_move > 0 and not reachable_cells.has(neighbor):
 				move_path[neighbor] = remaining_move - 1
-				if neighbor not in reachable_cells:
-					reachable_cells.append(neighbor)
+				reachable_cells.append(neighbor)
 
 	return reachable_cells

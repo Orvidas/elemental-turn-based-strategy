@@ -41,18 +41,21 @@ func _unhandled_input(event: InputEvent) -> void:
 			cursor.position = map.map_to_local(cell)
 
 	if event.is_action_pressed("select"):
-		var mouse_pos = map.get_global_mouse_position()
-		var cell = map.local_to_map(mouse_pos)
-		var unit = unit_manager.get_unit(cell)
-		if unit != null and player_faction.units.has(unit) and active_units.has(unit):
-			selected_unit = unit
-			reachable_cells = unit_manager.get_potential_paths(unit)
-			emit_signal("unit_selected", reachable_cells)
-		elif selected_unit != null:
-			if cell in reachable_cells:
-				await unit_manager.move_unit(selected_unit, cell)
+		var cell = map.local_to_map(cursor.position)
+		if selected_unit == null:
+			var unit = unit_manager.get_unit(cell)
+			if unit != null and player_faction.units.has(unit) and active_units.has(unit):
+				selected_unit = unit
+				reachable_cells = unit_manager.get_potential_paths(unit)
+				emit_signal("unit_selected", reachable_cells)
+		else:
+			if cell in reachable_cells and unit_manager.get_unit(cell) == null:
+				var moving_unit = selected_unit
 				active_units.erase(selected_unit)
-			cancel_selection()
+				cancel_selection()
+				player_turn = false
+				await unit_manager.move_unit(moving_unit, cell)
+				player_turn = true
 
 			if active_units.is_empty():
 				end_turn()
@@ -68,12 +71,12 @@ func cancel_selection() -> void:
 	reachable_cells = []
 	emit_signal("selection_canceled")
 
-func start_turn():
+func start_turn() -> void:
 	player_turn = true
 	active_units = player_faction.units.duplicate()
 	super()
 
-func end_turn():
+func end_turn() -> void:
 	player_turn = false
 	cancel_selection()
 	super()

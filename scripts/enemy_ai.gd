@@ -14,6 +14,8 @@ func start_turn():
 		var reachable_cells := unit_manager.get_potential_paths(unit)
 		if reachable_cells.size() > 0:
 			var target_cell = reachable_cells[randi() % reachable_cells.size()]
+			while unit_manager.units.has(target_cell):
+				target_cell = reachable_cells[randi() % reachable_cells.size()]
 			await unit_manager.move_unit(unit, target_cell)
 
 	end_turn()

@@ -37,7 +37,19 @@ script = ExtResource("5_0xn2n")
 is_player_faction = true
 
 [node name="Unit" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
-position = Vector2(104, 248)
+position = Vector2(200, 184)
+
+[node name="Unit2" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
+position = Vector2(216, 264)
+
+[node name="Unit3" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
+position = Vector2(232, 232)
+
+[node name="Unit4" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
+position = Vector2(184, 248)
+
+[node name="Unit5" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
+position = Vector2(168, 216)
 
 [node name="EnemyFaction" type="Node2D" parent="UnitManager"]
 script = ExtResource("5_0xn2n")
@@ -45,6 +57,42 @@ script = ExtResource("5_0xn2n")
 [node name="Unit" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
 modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
 position = Vector2(392, 216)
+
+[node name="Unit2" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(200, 120)
+
+[node name="Unit3" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(56, 120)
+
+[node name="Unit4" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(424, 184)
+
+[node name="Unit5" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(312, 248)
+
+[node name="Unit6" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(88, 120)
+
+[node name="Unit7" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(328, 104)
+
+[node name="Unit8" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(280, 120)
+
+[node name="Unit9" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(200, 24)
+
+[node name="Unit10" parent="UnitManager/EnemyFaction" instance=ExtResource("5_6pewv")]
+modulate = Color(0.91764706, 0.45490196, 0.45490196, 1)
+position = Vector2(344, 184)
 
 [node name="TurnManager" type="Node2D" parent="."]
 script = ExtResource("7_03wyr")
