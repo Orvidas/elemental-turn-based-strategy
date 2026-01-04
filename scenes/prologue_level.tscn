@@ -101,6 +101,8 @@ script = ExtResource("7_03wyr")
 map = NodePath("../../Map")
 unit_manager = NodePath("../../UnitManager")
 player_faction = NodePath("../../UnitManager/PlayerFaction")
+initial_hold_timer = 0.6
+fast_hold_timer = 0.06
 
 [node name="EnemyAI" type="Node2D" parent="TurnManager" node_paths=PackedStringArray("unit_manager", "enemy_faction")]
 script = ExtResource("9_6bg45")
