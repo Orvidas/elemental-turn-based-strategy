@@ -12,6 +12,12 @@ var movement_color: Color = Color(0.373, 0.804, 0.894, 0.588)
 @export
 var movement_border_color: Color = Color(0.388, 0.608, 1.0, 0.784)
 
+@export
+var danger_color := Color.RED
+
+@export
+var danger_border_color := Color.DARK_RED
+
 var panels: Array[Panel] = []
 
 var highlighted_panels: Array[Panel] = []
@@ -31,16 +37,20 @@ func _ready() -> void:
 		add_child(panel)
 		panels.append(panel)
 
-func highlight_selection(paths: Array[Vector2i]) -> void:
-	for cell in paths:
+func highlight_selection(paths: Dictionary) -> void:
+	highlight_cells(paths[UnitManager.DANGER], danger_color, danger_border_color)
+	highlight_cells(paths[UnitManager.MOVE], movement_color, movement_border_color)
+
+func highlight_cells(cells: Array, center_color: Color, border_color: Color) -> void:
+	for cell in cells:
 		var index = cell.y * columns + cell.x
 		if index >= 0 and index < panels.size():
 			var panel = panels[index]
 			panel.modulate.a = 1.0
 			var stylebox: StyleBoxFlat = panel.get_theme_stylebox("panel")
 			stylebox.draw_center = true
-			stylebox.bg_color = movement_color
-			stylebox.border_color = movement_border_color
+			stylebox.bg_color = center_color
+			stylebox.border_color = border_color
 			highlighted_panels.append(panel)
 
 func clear_highlights() -> void:

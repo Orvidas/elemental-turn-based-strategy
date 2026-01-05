@@ -1,6 +1,8 @@
 extends Node2D
 class_name UnitManager
 
+enum {MOVE, DANGER}
+
 @export
 var map: Map
 
@@ -46,9 +48,9 @@ func move_unit(unit: Unit, target_cell: Vector2i) -> bool:
 func get_unit(cell: Vector2i) -> Unit:
 	return units.get(cell, null)
 
-func get_potential_paths(unit: Unit) -> Array[Vector2i]:
+func get_potential_paths(unit: Unit) -> Dictionary:
 	if not units.has(unit.grid_position):
-		return []
+		return {}
 
 	# Clear all units from the astargrid
 	for clear_unit in units.values():
@@ -68,13 +70,13 @@ func get_potential_paths(unit: Unit) -> Array[Vector2i]:
 		for enemy_unit in enemy_faction.units:
 			astargrid.set_point_solid(enemy_unit.grid_position, true)
 
-	var reachable_cells: Array[Vector2i] = []
-	var move_path := {}
-	move_path[unit.grid_position] = unit.get_move_amount()
+	var reachable_cells := {MOVE: [unit.grid_position], DANGER: []}
+	var move_path := {unit.grid_position: Vector2i(unit.get_move_amount(), MOVE)}
 
 	while not move_path.is_empty():
 		var current_cell = move_path.keys()[0]
-		var remaining_move = move_path[current_cell]
+		var remaining_move: int = move_path[current_cell].x
+		var move_type: int = move_path[current_cell].y
 		move_path.erase(current_cell)
 
 		var neighbors = [
@@ -85,8 +87,20 @@ func get_potential_paths(unit: Unit) -> Array[Vector2i]:
 		]
 
 		for neighbor in neighbors:
-			if map.is_valid(neighbor) and not astargrid.is_point_solid(neighbor) and remaining_move > 0 and not reachable_cells.has(neighbor):
-				move_path[neighbor] = remaining_move - 1
-				reachable_cells.append(neighbor)
+			if not map.is_valid(neighbor):
+				continue
+
+			if move_type == MOVE:
+				if not astargrid.is_point_solid(neighbor) and remaining_move > 0 and not reachable_cells[MOVE].has(neighbor):
+					move_path[neighbor] = Vector2i(remaining_move - 1, MOVE)
+					reachable_cells[MOVE].append(neighbor)
+					reachable_cells[DANGER].erase(neighbor)
+				elif not reachable_cells[MOVE].has(neighbor):
+					move_path[neighbor] = Vector2i(unit.get_attack_range() - 1, DANGER)
+					reachable_cells[DANGER].append(neighbor)
+			elif remaining_move > 0 and not reachable_cells[MOVE].has(neighbor) and not move_path.has(neighbor):
+				move_path[neighbor] = Vector2i(remaining_move - 1, DANGER)
+				reachable_cells[DANGER].append(neighbor)
+
 
 	return reachable_cells

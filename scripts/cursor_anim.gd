@@ -1,6 +1,9 @@
 extends Sprite2D
 
 @export
+var default_unit_position: Unit
+
+@export
 var ANIMATION_SPEED := 0.65
 
 @export
@@ -12,8 +15,8 @@ var time_passed := 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
+	var default_position := Vector2(8.0, 8.0) if default_unit_position == null else default_unit_position.position
+	position = default_position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

@@ -25,7 +25,7 @@ var hold_threshold := initial_hold_threshold
 
 var selected_unit: Unit = null
 
-var reachable_cells: Array[Vector2i] = []
+var reachable_cells := {}
 
 var player_turn: bool = false
 
@@ -33,7 +33,7 @@ var active_units: Array[Unit] = []
 
 var prev_cursor_grid_position: Vector2i = Vector2i.ZERO
 
-signal unit_selected(paths: Array[Vector2i])
+signal unit_selected(paths: Dictionary)
 
 signal selection_canceled()
 
@@ -106,7 +106,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				reachable_cells = unit_manager.get_potential_paths(unit)
 				emit_signal("unit_selected", reachable_cells)
 		else:
-			if cell in reachable_cells and unit_manager.get_unit(cell) == null:
+			if cell in reachable_cells[UnitManager.MOVE] and unit_manager.get_unit(cell) == null:
 				var moving_unit = selected_unit
 				active_units.erase(selected_unit)
 				cancel_selection()
@@ -125,7 +125,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func cancel_selection() -> void:
 	selected_unit = null
-	reachable_cells = []
+	reachable_cells = {}
 	emit_signal("selection_canceled")
 
 func start_turn() -> void:

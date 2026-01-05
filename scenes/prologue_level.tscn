@@ -27,6 +27,8 @@ map = NodePath("../Map")
 panel_stylebox = ExtResource("3_mp8fi")
 movement_color = Color(0.37254903, 0.8039216, 0.89411765, 0.5882353)
 movement_border_color = Color(0.3882353, 0.60784316, 1, 0.78431374)
+danger_color = Color(1, 0, 0, 0.5882353)
+danger_border_color = Color(0.54509807, 0, 0, 0.78431374)
 
 [node name="UnitManager" type="Node2D" parent="." node_paths=PackedStringArray("map")]
 script = ExtResource("4_03wyr")
@@ -101,8 +103,10 @@ script = ExtResource("7_03wyr")
 map = NodePath("../../Map")
 unit_manager = NodePath("../../UnitManager")
 player_faction = NodePath("../../UnitManager/PlayerFaction")
-initial_hold_timer = 0.6
-fast_hold_timer = 0.06
+
+[node name="Cursor" parent="TurnManager/PlayerControls" index="0" node_paths=PackedStringArray("default_unit_position")]
+position = Vector2(8, 8)
+default_unit_position = NodePath("../../../UnitManager/PlayerFaction/Unit5")
 
 [node name="EnemyAI" type="Node2D" parent="TurnManager" node_paths=PackedStringArray("unit_manager", "enemy_faction")]
 script = ExtResource("9_6bg45")
@@ -116,3 +120,5 @@ zoom = Vector2(2, 2)
 [connection signal="selection_canceled" from="TurnManager/PlayerControls" to="GridDisplay" method="clear_highlights"]
 [connection signal="toggle_grid" from="TurnManager/PlayerControls" to="GridDisplay" method="toggle_neutral_grid"]
 [connection signal="unit_selected" from="TurnManager/PlayerControls" to="GridDisplay" method="highlight_selection"]
+
+[editable path="TurnManager/PlayerControls"]

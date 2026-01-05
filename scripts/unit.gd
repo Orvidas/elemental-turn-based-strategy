@@ -43,3 +43,6 @@ func move(path: Array[Vector2i], map: Map) -> void:
 
 func get_move_amount() -> int:
 	return 5
+
+func get_attack_range() -> int:
+	return 2
