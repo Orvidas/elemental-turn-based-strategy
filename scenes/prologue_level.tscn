@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c4l3wpykuwmo"]
+[gd_scene load_steps=11 format=3 uid="uid://c4l3wpykuwmo"]
 
 [ext_resource type="PackedScene" uid="uid://43bduavpeyt0" path="res://scenes/prologue_map.tscn" id="1_5y4sk"]
 [ext_resource type="Script" uid="uid://dbv85idaeb2tn" path="res://scripts/grid_display.gd" id="2_0xn2n"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bk1od7eigwrjs" path="res://scripts/turn_manager.gd" id="7_03wyr"]
 [ext_resource type="PackedScene" uid="uid://bwmsgscawihao" path="res://scenes/cursor.tscn" id="7_cyj41"]
 [ext_resource type="Script" uid="uid://c75hxe3ejyijd" path="res://scripts/enemy_ai.gd" id="9_6bg45"]
+[ext_resource type="PackedScene" uid="uid://0cgemhbkmwp8" path="res://scenes/action_menu.tscn" id="9_8ep2f"]
 
 [node name="PrologueLevel" type="Node2D"]
 
@@ -103,6 +104,7 @@ script = ExtResource("7_03wyr")
 map = NodePath("../../Map")
 unit_manager = NodePath("../../UnitManager")
 player_faction = NodePath("../../UnitManager/PlayerFaction")
+action_menu_scene = ExtResource("9_8ep2f")
 
 [node name="Cursor" parent="TurnManager/PlayerControls" index="0" node_paths=PackedStringArray("default_unit_position")]
 position = Vector2(8, 8)

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://0cgemhbkmwp8"]
+
+[ext_resource type="Script" uid="uid://cntfgmsv5giqq" path="res://scripts/action_menu.gd" id="1_m2v2x"]
+
+[node name="ActionMenuPosition" type="Node2D"]
+script = ExtResource("1_m2v2x")
+
+[node name="ActionMenu" type="VBoxContainer" parent="."]
+offset_right = 24.0
+offset_bottom = 8.0

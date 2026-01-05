@@ -45,6 +45,16 @@ func move_unit(unit: Unit, target_cell: Vector2i) -> bool:
 	units[target_cell] = unit
 	return true
 
+func snap_unit(unit: Unit, target_cell: Vector2i) -> bool:
+	if not map.is_valid(target_cell) and not units.has(target_cell):
+		return false
+	
+	units.erase(unit.grid_position)
+	units[target_cell] = unit
+	unit.grid_position = target_cell
+	unit.position = map.map_to_local(target_cell)
+	return true
+
 func get_unit(cell: Vector2i) -> Unit:
 	return units.get(cell, null)
 

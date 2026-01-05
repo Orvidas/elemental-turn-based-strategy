@@ -19,6 +19,9 @@ var initial_hold_threshold := .55
 @export
 var fast_hold_threshold := .065
 
+@export
+var action_menu_scene: PackedScene
+
 var hold_timer := 0.0
 
 var hold_threshold := initial_hold_threshold
@@ -107,17 +110,26 @@ func _unhandled_input(event: InputEvent) -> void:
 				emit_signal("unit_selected", reachable_cells)
 		else:
 			if cell in reachable_cells[UnitManager.MOVE] and unit_manager.get_unit(cell) == null:
-				var moving_unit = selected_unit
-				active_units.erase(selected_unit)
-				cancel_selection()
+				var original_grid_position = selected_unit.grid_position
+				await unit_manager.move_unit(selected_unit, cell)
+
+				var action_menu: ActionMenu = action_menu_scene.instantiate()
+				action_menu.position = cursor.position
+				action_menu.selected_unit = selected_unit
+				add_child(action_menu)
+
 				player_turn = false
-				await unit_manager.move_unit(moving_unit, cell)
+				var menu_canceled: bool = await action_menu.menu_closed
 				player_turn = true
+				if menu_canceled:
+					unit_manager.snap_unit(selected_unit, original_grid_position)
+				else:
+					active_units.erase(selected_unit)
+					cancel_selection()
 
 			if active_units.is_empty():
 				end_turn()
-
-	if event.is_action_pressed("cancel"):
+	elif event.is_action_pressed("cancel"):
 		cancel_selection()
 
 	if event.is_action_pressed("disable_grid"):

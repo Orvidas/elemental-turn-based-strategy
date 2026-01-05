@@ -46,3 +46,6 @@ func get_move_amount() -> int:
 
 func get_attack_range() -> int:
 	return 2
+
+func wait() -> void:
+	print("Waiting")
