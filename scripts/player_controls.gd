@@ -20,7 +20,7 @@ var initial_hold_threshold := .55
 var fast_hold_threshold := .065
 
 @export
-var action_menu_scene: PackedScene
+var action_menu: ActionMenu
 
 var hold_timer := 0.0
 
@@ -113,20 +113,15 @@ func _unhandled_input(event: InputEvent) -> void:
 				var original_grid_position = selected_unit.grid_position
 				await unit_manager.move_unit(selected_unit, cell)
 
-				var action_menu: ActionMenu = action_menu_scene.instantiate()
-				action_menu.position = cursor.position
-				action_menu.selected_unit = selected_unit
-				add_child(action_menu)
-
 				player_turn = false
+				action_menu.display_menu_for_unit(selected_unit)
 				var menu_canceled: bool = await action_menu.menu_closed
-				player_turn = true
 				if menu_canceled:
 					unit_manager.snap_unit(selected_unit, original_grid_position)
 				else:
 					active_units.erase(selected_unit)
 					cancel_selection()
-
+				player_turn = true
 			if active_units.is_empty():
 				end_turn()
 	elif event.is_action_pressed("cancel"):

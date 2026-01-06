@@ -100,11 +100,11 @@ position = Vector2(344, 184)
 [node name="TurnManager" type="Node2D" parent="."]
 script = ExtResource("7_03wyr")
 
-[node name="PlayerControls" parent="TurnManager" node_paths=PackedStringArray("map", "unit_manager", "player_faction") instance=ExtResource("7_cyj41")]
+[node name="PlayerControls" parent="TurnManager" node_paths=PackedStringArray("map", "unit_manager", "player_faction", "action_menu") instance=ExtResource("7_cyj41")]
 map = NodePath("../../Map")
 unit_manager = NodePath("../../UnitManager")
 player_faction = NodePath("../../UnitManager/PlayerFaction")
-action_menu_scene = ExtResource("9_8ep2f")
+action_menu = NodePath("../../ActionMenuPosition")
 
 [node name="Cursor" parent="TurnManager/PlayerControls" index="0" node_paths=PackedStringArray("default_unit_position")]
 position = Vector2(8, 8)
@@ -118,6 +118,10 @@ enemy_faction = NodePath("../../UnitManager/EnemyFaction")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(240, 145)
 zoom = Vector2(2, 2)
+
+[node name="ActionMenuPosition" parent="." node_paths=PackedStringArray("unit_manager") instance=ExtResource("9_8ep2f")]
+visible = false
+unit_manager = NodePath("../UnitManager")
 
 [connection signal="selection_canceled" from="TurnManager/PlayerControls" to="GridDisplay" method="clear_highlights"]
 [connection signal="toggle_grid" from="TurnManager/PlayerControls" to="GridDisplay" method="toggle_neutral_grid"]

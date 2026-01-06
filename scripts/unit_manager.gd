@@ -114,3 +114,46 @@ func get_potential_paths(unit: Unit) -> Dictionary:
 
 
 	return reachable_cells
+
+func get_enemies_in_range(unit: Unit) -> Array[Unit]:
+	var enemies_in_range: Array[Unit] = []
+	var attack_path := {unit.grid_position: unit.get_attack_range()}
+	var all_enemies: Array[Unit] = []
+	var enemy_factions: Array[Faction] = factions.duplicate()
+	for faction in factions:
+		if faction.units.has(unit):
+			enemy_factions.erase(faction)
+
+			for allied in faction.allied_factions:
+				enemy_factions.erase(allied)
+			break
+
+	for enemy_faction in enemy_factions:
+		for enemy_unit in enemy_faction.units:
+			all_enemies.append(enemy_unit)
+
+	while not attack_path.is_empty():
+		var current_cell = attack_path.keys()[0]
+		var remaining_range: int = attack_path[current_cell]
+		attack_path.erase(current_cell)
+
+		var neighbors = [
+			current_cell + Vector2i.RIGHT,
+			current_cell + Vector2i.LEFT,
+			current_cell + Vector2i.DOWN,
+			current_cell + Vector2i.UP
+		]
+
+		for neighbor in neighbors:
+			if not map.is_valid(neighbor):
+				continue
+
+			if units.has(neighbor) and all_enemies.has(units[neighbor]):
+				var enemy_unit = units[neighbor]
+				if not enemies_in_range.has(enemy_unit):
+					enemies_in_range.append(enemy_unit)
+
+			if remaining_range > 1 and not attack_path.has(neighbor):
+				attack_path[neighbor] = remaining_range - 1
+
+	return enemies_in_range

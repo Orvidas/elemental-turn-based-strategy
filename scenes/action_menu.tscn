@@ -6,5 +6,17 @@
 script = ExtResource("1_m2v2x")
 
 [node name="ActionMenu" type="VBoxContainer" parent="."]
-offset_right = 24.0
-offset_bottom = 8.0
+offset_right = 58.0
+offset_bottom = 64.0
+theme_override_constants/separation = 2
+
+[node name="AttackBtn" type="Button" parent="ActionMenu"]
+layout_mode = 2
+text = "Attack"
+
+[node name="WaitBtn" type="Button" parent="ActionMenu"]
+layout_mode = 2
+text = "Wait"
+
+[connection signal="pressed" from="ActionMenu/AttackBtn" to="." method="attack"]
+[connection signal="pressed" from="ActionMenu/WaitBtn" to="." method="wait"]
