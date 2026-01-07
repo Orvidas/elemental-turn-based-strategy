@@ -38,8 +38,10 @@ func _ready() -> void:
 		panels.append(panel)
 
 func highlight_selection(paths: Dictionary) -> void:
-	highlight_cells(paths[UnitManager.DANGER], danger_color, danger_border_color)
-	highlight_cells(paths[UnitManager.MOVE], movement_color, movement_border_color)
+	if paths.has(UnitManager.DANGER):
+		highlight_cells(paths[UnitManager.DANGER], danger_color, danger_border_color)
+	if paths.has(UnitManager.MOVE):
+		highlight_cells(paths[UnitManager.MOVE], movement_color, movement_border_color)
 
 func highlight_cells(cells: Array, center_color: Color, border_color: Color) -> void:
 	for cell in cells:

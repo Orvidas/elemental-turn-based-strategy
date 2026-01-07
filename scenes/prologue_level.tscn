@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c4l3wpykuwmo"]
+[gd_scene load_steps=12 format=3 uid="uid://c4l3wpykuwmo"]
 
 [ext_resource type="PackedScene" uid="uid://43bduavpeyt0" path="res://scenes/prologue_map.tscn" id="1_5y4sk"]
 [ext_resource type="Script" uid="uid://dbv85idaeb2tn" path="res://scripts/grid_display.gd" id="2_0xn2n"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bwmsgscawihao" path="res://scenes/cursor.tscn" id="7_cyj41"]
 [ext_resource type="Script" uid="uid://c75hxe3ejyijd" path="res://scripts/enemy_ai.gd" id="9_6bg45"]
 [ext_resource type="PackedScene" uid="uid://0cgemhbkmwp8" path="res://scenes/action_menu.tscn" id="9_8ep2f"]
+[ext_resource type="Script" uid="uid://i0wjqe5xa7vp" path="res://scripts/battle_manager.gd" id="11_8ep2f"]
 
 [node name="PrologueLevel" type="Node2D"]
 
@@ -43,16 +44,16 @@ is_player_faction = true
 position = Vector2(200, 184)
 
 [node name="Unit2" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
-position = Vector2(216, 264)
+position = Vector2(72, 248)
 
 [node name="Unit3" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
-position = Vector2(232, 232)
+position = Vector2(360, 248)
 
 [node name="Unit4" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
-position = Vector2(184, 248)
+position = Vector2(392, 152)
 
 [node name="Unit5" parent="UnitManager/PlayerFaction" instance=ExtResource("5_6pewv")]
-position = Vector2(168, 216)
+position = Vector2(72, 72)
 
 [node name="EnemyFaction" type="Node2D" parent="UnitManager"]
 script = ExtResource("5_0xn2n")
@@ -119,12 +120,21 @@ enemy_faction = NodePath("../../UnitManager/EnemyFaction")
 position = Vector2(240, 145)
 zoom = Vector2(2, 2)
 
-[node name="ActionMenuPosition" parent="." node_paths=PackedStringArray("unit_manager") instance=ExtResource("9_8ep2f")]
+[node name="ActionMenuPosition" parent="." node_paths=PackedStringArray("map", "unit_manager", "cursor", "battle_manager") instance=ExtResource("9_8ep2f")]
 visible = false
+map = NodePath("../Map")
 unit_manager = NodePath("../UnitManager")
+cursor = NodePath("../TurnManager/PlayerControls/Cursor")
+battle_manager = NodePath("../BattleManager")
+
+[node name="BattleManager" type="Node2D" parent="." node_paths=PackedStringArray("map")]
+script = ExtResource("11_8ep2f")
+map = NodePath("../Map")
 
 [connection signal="selection_canceled" from="TurnManager/PlayerControls" to="GridDisplay" method="clear_highlights"]
 [connection signal="toggle_grid" from="TurnManager/PlayerControls" to="GridDisplay" method="toggle_neutral_grid"]
 [connection signal="unit_selected" from="TurnManager/PlayerControls" to="GridDisplay" method="highlight_selection"]
+[connection signal="clear_highlights" from="ActionMenuPosition" to="GridDisplay" method="clear_highlights"]
+[connection signal="highlight_targets" from="ActionMenuPosition" to="GridDisplay" method="highlight_selection"]
 
 [editable path="TurnManager/PlayerControls"]

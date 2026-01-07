@@ -114,6 +114,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				await unit_manager.move_unit(selected_unit, cell)
 
 				player_turn = false
+				emit_signal("selection_canceled")
 				action_menu.display_menu_for_unit(selected_unit)
 				var menu_canceled: bool = await action_menu.menu_closed
 				if menu_canceled:
